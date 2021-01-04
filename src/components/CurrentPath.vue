@@ -1,6 +1,6 @@
 <template>
   <div id="pathth">
-      当前目录：{{ path }}
+      <!-- 当前目录：{{ path }} -->
       <current-file></current-file>
   </div>
 </template>

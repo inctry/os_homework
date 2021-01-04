@@ -2,7 +2,7 @@
   <div id="file">
     <el-card class="box-card" style="width:100%">
       <div slot="header" class="clearfix">
-        <span>当前目录下的文件</span>
+        <span>当前路径: {{ path }}</span>
       </div>
       <div v-for="item in filelist" :key="item.name" style="margin: 20px; float: left" @click="openFile($event)">
         <i class="el-icon-files"></i>
@@ -16,7 +16,7 @@
 export default {
   data: function() {
     return {
-
+      
     }
   },
   computed: {
@@ -27,7 +27,15 @@ export default {
         filelist.push(item.name);
       });
       return filelist;
-    }
+    },
+    path() {
+      let path = this.$store.state.currentpath;
+      let finalpath = '/';
+      path.forEach((item) => {
+        finalpath += `${item}/`;
+      })
+      return finalpath;
+    } 
   },
   methods: {
     openFile(event) {
@@ -40,6 +48,7 @@ export default {
 <style lang="scss" scope>
 #file {
   padding-top: 10px;
+  font-size: 18px;
 }
 .el-card__body {
   padding: 10px !important;

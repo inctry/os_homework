@@ -1,7 +1,8 @@
 class diskblock {
-  constructor(id, state) {
+  constructor(id, nxt, content) {
     this.id = id;
-    this.state = state;
+    this.nxt = nxt;
+    this.content = content;
   }
 }
 // state > 0  means next block id

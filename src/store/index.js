@@ -9,8 +9,10 @@ import filecatalog from '../module/filecatalog.js'
 export default new Vuex.Store({
   state: {
     currentpath: [],
-    currentfilecatlog: [],
-    FAT: []
+    currentFilecatlog: [],
+    FAT: [],
+    currentFile: null,
+    currentFileContent: ''
     
   },
   mutations: {
@@ -20,7 +22,49 @@ export default new Vuex.Store({
         state.FAT.push(new diskblock(i, -2));
       }
       new dentry();
-      state.currentFilecatlog = new filecatalog([]);
+      new filecatalog()
+      state.currentFilecatlog = [];
+      // state.currentFile = new dentry('');
+    },
+    createFile(state, form) {
+      //allocate
+      let size = form.content.length;
+      let last = -2;
+      let pointer = 0;
+      let firblockid = -1;
+      state.FAT.every((item, index) => {
+        if(item.state === -2) {
+          if(last >= 0) state.FAT[last].nxt = index;
+          else firblockid = index;
+          last = index;
+          item.content = form.content.substring(pointer, Math.min(pointer + 16, size));
+          pointer = Math.min(pointer + 16, size);
+          if(pointer === size) {
+            item.nxt = -1;
+            return false;
+          }
+        }
+        return true;
+      });
+
+      let file = new dentry(form.name, firblockid, state.currentFilecatlog, true, form.content.length);
+      state.currentFilecatlog.push(file);
+    },
+    getFileContent(state) {
+      let str = '';
+      let file = state.currentFile;
+      if(file === null) {
+        state.CurrentFileContent = '目前暂未打开文件';
+        return 0;
+      }
+      let addr = file.address;
+      let FAT = state.FAT;
+      while(FAT[addr].nxt !== -2) {
+        str += FAT[addr].content;
+        if(FAT[addr].nxt === -1) break;
+        addr = FAT[addr].nxt;
+      }
+      state.CurrentFileContent = str;
     }
   },
   actions: {

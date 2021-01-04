@@ -1,10 +1,10 @@
 <template>
 	<el-container>
 		<el-header> 
-			<current-path> </current-path> 
+			<current-path></current-path> 
 		</el-header>
 		<el-main>
-      <current-option> </current-option>
+      <current-option></current-option>
     </el-main>
 	</el-container>
 </template>
@@ -21,9 +21,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-header {
-
+	height: 30% !important;
 }
 .el-main {
 

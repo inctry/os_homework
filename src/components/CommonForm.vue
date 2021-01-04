@@ -3,6 +3,9 @@
     <el-form-item label="名字">
       <el-input v-model="form.name"></el-input>
     </el-form-item>
+    <el-form-item label="内容">
+      <el-input type="textarea" v-model="form.content"></el-input>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -26,6 +29,9 @@ export default {
 
 <style lang="scss" scope>
   .el-dialog__body {
-    padding: 15px 20px;
+    padding: 10px 20px;
+  }
+  .el-textarea__inner {
+    height: 200px;
   }
 </style>

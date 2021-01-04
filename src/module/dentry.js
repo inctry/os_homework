@@ -1,10 +1,10 @@
 class dentry {
-  constructor(name, address, parent, isFile, path, size) {
+  constructor(name, address, parent, isFile, size) {
     this.name = name;
     this.address = address;
     this.parent = parent;
     this.isFile = isFile;
-    this.path = path;
+    // this.path = path;
     this.size = size;
   }
 }

@@ -3,6 +3,13 @@
     <el-form-item label="名字">
       <el-input v-model="form.name"></el-input>
     </el-form-item>
+    <el-form-item label="权限">
+      <el-checkbox-group v-model="form.type">
+        <el-checkbox label="可读" name="read"></el-checkbox>
+        <el-checkbox label="可写" name="write"></el-checkbox>
+        <el-checkbox label="是否共享" name="isShared"></el-checkbox>
+      </el-checkbox-group>
+    </el-form-item>
     <el-form-item label="内容">
       <el-input type="textarea" v-model="form.content"></el-input>
     </el-form-item>

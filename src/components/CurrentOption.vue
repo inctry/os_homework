@@ -14,9 +14,9 @@
     <el-button type="primary">write</el-button>
     <el-button type="primary" @click="close">close</el-button>
     <el-button type="primary">delete</el-button>
-    <el-button type="primary">mkdir</el-button>
-    <el-button type="primary">dir</el-button>
-    <el-button type="primary">cd</el-button>
+    <el-button type="primary" @mkdir="mkdir">mkdir</el-button>
+    <!-- <el-button type="primary">dir</el-button> -->
+    <el-button type="primary">返回上一级</el-button>
     <el-button type="primary">logout</el-button>
   </el-row>
 
@@ -47,19 +47,22 @@ export default {
       dialogVisible: false,
       form: {
         name: '',
-        content: ''
+        content: '',
+        type: ['可读', '可写', '是否共享']
       }
+      
     }
   },
   computed: {
     content() {
-      this.$store.commit('getFileContent');
+      // this.$store.commit('getFileContent');
       return this.$store.state.currentFileContent;
     }
   },
   methods: {
     close() {
-      this.$store.currentFile = null;
+      this.$store.state.currentFile = null;
+      this.$store.commit('getFileContent');
     },
     init() {
       this.$store.commit('init');
@@ -73,6 +76,9 @@ export default {
 
       this.$store.commit('createFile', this.form);
       this.dialogVisible = false;
+    },
+    mkdir() {
+      
     }
   }
 }

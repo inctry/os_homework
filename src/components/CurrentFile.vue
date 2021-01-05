@@ -4,9 +4,9 @@
       <div slot="header" class="clearfix">
         <span>当前路径: {{ path }}</span>
       </div>
-      <div v-for="item in filelist" :key="item.name" style="margin: 20px; float: left" @click="openFile($event)">
+      <div v-for="item in filelist" :key="item.name" style="margin: 0px 20px 10px 20px; float: left" @click="openFile($event)">
         <i class="el-icon-files"></i>
-        <span>{{ item }}</span>
+        <a href="#" class="itemname">{{ item }}</a>
       </div>
     </el-card>
   </div>
@@ -39,7 +39,11 @@ export default {
   },
   methods: {
     openFile(event) {
-      console.log(event.currentTarget);
+      console.log(event.currentTarget.lastChild.innerText);
+      let fileName = event.currentTarget.lastChild.innerText;
+      this.$store.commit('openFile', fileName);
+      this.$store.commit('getFileContent');
+
     }
   }
 }
@@ -52,6 +56,11 @@ export default {
 }
 .el-card__body {
   padding: 10px !important;
+}
+a.itemname {
+  color: #1E90FF;
+  font-size: 15px;
+  text-decoration: underline;
 }
 .el-card__header {
   padding: 15px 18px;

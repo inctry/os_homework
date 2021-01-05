@@ -12,7 +12,9 @@ export default new Vuex.Store({
     currentFilecatlog: [],
     FAT: [],
     currentFile: null,
-    currentFileContent: ''
+    currentFileContent: '',
+    currentUser: '',
+    userList: ['admin', 'user1', 'user2']
     
   },
   mutations: {
@@ -33,7 +35,7 @@ export default new Vuex.Store({
       let pointer = 0;
       let firblockid = -1;
       state.FAT.every((item, index) => {
-        if(item.state === -2) {
+        if(item.nxt === -2) {
           if(last >= 0) state.FAT[last].nxt = index;
           else firblockid = index;
           last = index;
@@ -47,14 +49,14 @@ export default new Vuex.Store({
         return true;
       });
 
-      let file = new dentry(form.name, firblockid, state.currentFilecatlog, true, form.content.length);
+      let file = new dentry(form.name, firblockid, state.currentFilecatlog, true, form.content.length, 'admin', form.type);
       state.currentFilecatlog.push(file);
     },
     getFileContent(state) {
       let str = '';
       let file = state.currentFile;
       if(file === null) {
-        state.CurrentFileContent = '目前暂未打开文件';
+        state.currentFileContent = '目前暂未打开文件';
         return 0;
       }
       let addr = file.address;
@@ -64,7 +66,15 @@ export default new Vuex.Store({
         if(FAT[addr].nxt === -1) break;
         addr = FAT[addr].nxt;
       }
-      state.CurrentFileContent = str;
+      state.currentFileContent = str;
+    },
+    openFile(state, name) {
+      state.currentFilecatlog.some((item) => {
+        if(item.name === name) {
+          state.currentFile = item;
+          return true;
+        }
+      });
     }
   },
   actions: {

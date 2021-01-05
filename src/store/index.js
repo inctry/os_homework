@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
     currentpath: [],
     currentFilecatlog: [],
+    lastFilecatlog: [],
     FAT: [],
     currentFile: null,
     currentFileContent: '',
@@ -49,7 +50,9 @@ export default new Vuex.Store({
         return true;
       });
 
-      let file = new dentry(form.name, firblockid, state.currentFilecatlog, true, form.content.length, 'admin', form.type);
+      let file = new dentry(form.name, firblockid, state.currentFilecatlog, form.file === '文件', 
+      form.content.length, 'admin', form.type);
+
       state.currentFilecatlog.push(file);
     },
     getFileContent(state) {
@@ -71,8 +74,12 @@ export default new Vuex.Store({
     openFile(state, name) {
       state.currentFilecatlog.some((item) => {
         if(item.name === name) {
-          state.currentFile = item;
-          return true;
+          if(item.isFile === true) {
+            state.currentFile = item;
+            return true;
+          } else {
+            //
+          }
         }
       });
     }

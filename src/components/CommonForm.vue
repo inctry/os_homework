@@ -10,6 +10,10 @@
         <el-checkbox label="是否共享" name="isShared"></el-checkbox>
       </el-checkbox-group>
     </el-form-item>
+    <el-form-item label="类型">
+      <el-radio v-model="form.file" label="文件">文件</el-radio>
+      <el-radio v-model="form.file" label="文件夹">文件夹</el-radio>
+    </el-form-item>
     <el-form-item label="内容">
       <el-input type="textarea" v-model="form.content"></el-input>
     </el-form-item>

@@ -14,7 +14,7 @@
     <el-button type="primary">write</el-button>
     <el-button type="primary" @click="close">close</el-button>
     <el-button type="primary">delete</el-button>
-    <el-button type="primary" @mkdir="mkdir">mkdir</el-button>
+    <el-button type="primary" @mkdir="dialogVisible = true">mkdir</el-button>
     <!-- <el-button type="primary">dir</el-button> -->
     <el-button type="primary">返回上一级</el-button>
     <el-button type="primary">logout</el-button>
@@ -48,6 +48,7 @@ export default {
       form: {
         name: '',
         content: '',
+        file: '文件',
         type: ['可读', '可写', '是否共享']
       }
       
@@ -77,9 +78,6 @@ export default {
       this.$store.commit('createFile', this.form);
       this.dialogVisible = false;
     },
-    mkdir() {
-      
-    }
   }
 }
 </script>

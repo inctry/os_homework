@@ -145,7 +145,7 @@ export default new Vuex.Store({
       // return;
       if(state.currentUser === 'admin'
       || file.creator === state.currentUser
-      || (file.authorize.find(v => v === '可读') && file.authorize.find(v => v === '可写'))) {
+      || (file.authorize.find(v => v === '是否共享') && file.authorize.find(v => v === '可写'))) {
 
 
         let now = file.address;

@@ -10,14 +10,16 @@
       </span>
     </el-dialog>
     <el-button type="primary" @click="init">系统初始化</el-button>
-    <el-button type="primary" >登录</el-button>
+    <el-button type="primary" @click="loginUser($event)">admin</el-button>
+    <el-button type="primary" @click="loginUser($event)">user1</el-button>
+    <el-button type="primary" @click="loginUser($event)">user2</el-button>
     <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建文件</el-button>
     <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建文件夹</el-button>
     <el-button type="primary" @click="function(){dialogVisible = true, statu = '编辑';}">编 辑</el-button>
     <el-button type="primary" @click="close">关 闭</el-button>
     <!-- <el-button type="primary">dir</el-button> -->
     <el-button type="primary" @click="returnLast">返回上一级</el-button>
-    <el-button type="primary">登出</el-button>
+    <!-- <el-button type="primary">登出</el-button> -->
   </el-row>
 
   <div class="filecontent"> 
@@ -59,9 +61,15 @@ export default {
     content() {
       // this.$store.commit('getFileContent');
       return this.$store.state.currentFileContent;
+    },
+    fileName() {
+      return this.$store.state.currentFile.name;
     }
   },
   methods: {
+    loginUser(event) {
+      this.$store.state.currentUser = event.currentTarget.innerText;
+    },
     close() {
       this.$store.state.currentFile = null;
       this.$store.commit('getFileContent');
@@ -95,13 +103,13 @@ export default {
     edit() {
       this.statu = '编辑';
       let filecatlog = this.$store.state.currentFileCatlog.catlog;
-
       if(!filecatlog.some((item) => {
         if(item.name === this.form.name) {
-          console.log(item);
-          this.$store.commit('editFile', this.form, item);
+          this.$store.commit('editFile', {form: this.form , item: item});
+          // console.log(item);
           return true;
         }
+        return false;
       })) {
         this.$message.error({
           message: '未找到对应文件名请重试',
@@ -110,11 +118,13 @@ export default {
       }
       this.statu = '';
       this.dialogVisible = false;
+      this.$store.commit('getFileContent')
     },
     returnLast() {
       this.$store.commit('returnLast');
     }
-  }
+  },
+
 }
 </script>
 

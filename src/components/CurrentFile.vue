@@ -27,6 +27,8 @@ export default {
       // console.log(this.$store.state.currentFileCatlog.catlog);
       let filelist = [];
       currentFilecatlog.forEach((item) => {
+        if(this.$store.state.currentUser === 'admin' || item.creator === this.$store.state.currentUser 
+        || (((item.authorize.find((item => item === '是否共享'))))))
         filelist.push(item.name);
       });
       // console.log(filelist);

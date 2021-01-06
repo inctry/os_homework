@@ -6,6 +6,7 @@ Vue.use(Vuex)
 import dentry from '../module/dentry.js'
 import diskblock from '../module/diskblock.js'
 import fileCatlog from '../module/fileCatlog.js'
+import {  Message } from 'element-ui'
 export default new Vuex.Store({
   state: {
     currentpath: [],
@@ -79,15 +80,26 @@ export default new Vuex.Store({
       console.log(name);
       state.currentFileCatlog.catlog.some((item) => {
         if(item.name === name) {
-          if(item.isFile === true) {
-            state.currentFile = item;
-            return true;
+          if(state.currentUser === 'admin' 
+          || item.creator === state.currentUser
+          || item.authorize.find(v => v === '可读')) {
+
+
+            if(item.isFile === true) {
+              state.currentFile = item;
+              return true;
+            } else {
+              //open folder
+              state.currentFile = null;
+              state.currentFileContent = '目前暂未打开文件';
+              state.currentpath.push(item.name);
+              state.currentFileCatlog = item.isFile;
+            }
           } else {
-            //open folder
-            state.currentFile = null;
-            state.currentFileContent = '目前暂未打开文件';
-            state.currentpath.push(item.name);
-            state.currentFileCatlog = item.isFile;
+            Message({
+              message: '您没有权限读取',
+              type: 'error'
+            });
           }
         }
       });
@@ -96,6 +108,7 @@ export default new Vuex.Store({
       state.currentFile = null;
       state.currentFileContent = '目前暂未打开文件';
       state.currentpath.splice(state.currentpath.length - 1, 1);
+      if(state.currentFileCatlog.parent !== null)
       state.currentFileCatlog = state.currentFileCatlog.parent;
     },
     deleteFile(state, name) {
@@ -122,40 +135,56 @@ export default new Vuex.Store({
       });
       state.currentFileCatlog.catlog.splice(ind, 1);
     },
-    editFile(state, form, file) {
-      console.log(file);
-      console.log(form);
-      let now = file.address;
+    editFile(state, data) {
+      // console.log(file);
+      // console.log(form);
+      // console.log(item);
+      let form = data.form;
+      let file = data.item;
+      // console.log(data);
+      // return;
+      if(state.currentUser === 'admin'
+      || file.creator === state.currentUser
+      || (file.authorize.find(v => v === '可读') && file.authorize.find(v => v === '可写'))) {
 
-      console.log(now);
-      while(state.FAT[now].nxt != -2) {
-        let nxt = state.FAT[now].nxt;
-        if(nxt == -1) {
-          state.FAT[now].nxt = -2;
-          break;
-        }
-        state.FAT[now].nxt = -2;
-        now = nxt;
-      }
-      let size = form.content.length;
-      let last = -2;
-      let pointer = 0;
-      let firblockid = -1;
-      firblockid;
-      state.FAT.every((item, index) => {
-        if(item.nxt === -2) {
-          if(last >= 0) state.FAT[last].nxt = index;
-          else firblockid = index;
-          last = index;
-          item.content = form.content.substring(pointer, Math.min(pointer + 16, size));
-          pointer = Math.min(pointer + 16, size);
-          if(pointer === size) {
-            item.nxt = -1;
-            return false;
+
+        let now = file.address;
+
+        console.log(now);
+        while(state.FAT[now].nxt != -2) {
+          let nxt = state.FAT[now].nxt;
+          if(nxt == -1) {
+            state.FAT[now].nxt = -2;
+            break;
           }
+          state.FAT[now].nxt = -2;
+          now = nxt;
         }
-        return true;
-      });
+        let size = form.content.length;
+        let last = -2;
+        let pointer = 0;
+        let firblockid = -1;
+        firblockid;
+        state.FAT.every((item, index) => {
+          if(item.nxt === -2) {
+            if(last >= 0) state.FAT[last].nxt = index;
+            else firblockid = index;
+            last = index;
+            item.content = form.content.substring(pointer, Math.min(pointer + 16, size));
+            pointer = Math.min(pointer + 16, size);
+            if(pointer === size) {
+              item.nxt = -1;
+              return false;
+            }
+          }
+          return true;
+        });
+      } else {
+        Message({
+          message: '您没有权限编辑',
+          type: 'error'
+        });
+      }
     }
   },
   actions: {

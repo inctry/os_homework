@@ -25,6 +25,7 @@ export default new Vuex.Store({
         state.FAT.push(new diskblock(i, -2));
       }
       new dentry();
+      state.currentpath = [];
       state.currentFileCatlog = new fileCatlog(null, []); 
       // state.currentFile = new dentry('');
     },
@@ -147,7 +148,7 @@ export default new Vuex.Store({
       || file.creator === state.currentUser
       || (file.authorize.find(v => v === '是否共享') && file.authorize.find(v => v === '可写'))) {
 
-
+        file.authorize = form.type;
         let now = file.address;
 
         console.log(now);

@@ -13,8 +13,8 @@
     <el-button type="primary" @click="loginUser($event)">admin</el-button>
     <el-button type="primary" @click="loginUser($event)">user1</el-button>
     <el-button type="primary" @click="loginUser($event)">user2</el-button>
-    <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建文件</el-button>
-    <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建文件夹</el-button>
+    <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建</el-button>
+    <!-- <el-button type="primary" @click="function(){dialogVisible = true, statu = '创建';}">创建文件夹</el-button> -->
     <el-button type="primary" @click="function(){dialogVisible = true, statu = '编辑';}">编 辑</el-button>
     <el-button type="primary" @click="close">关 闭</el-button>
     <!-- <el-button type="primary">dir</el-button> -->
